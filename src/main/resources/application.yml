@@ -1,1 +1,25 @@
-server.port=8005
+server:
+  port: 8005
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: movie-gateway-routing-server
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: movies
+          uri: lb://movie-info-service
+          predicates:
+            - Path=/api/movies
+        - id: rating
+          uri: http://127.0.0.1:8003
+          predicates:
+            - Path=/api/rating
